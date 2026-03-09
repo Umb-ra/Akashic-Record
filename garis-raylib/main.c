@@ -14,7 +14,9 @@ int main(void) {
     SetTargetFPS(60);
     Screen current = MENU;
 
-    int abBtnX = SCREEN_W/2 - 80, abBtnY = 268 + 155 + 14;
+    int btnY = 268 + 155 + 14;
+    int umbraBtnX = SCREEN_W/2 - 170;
+    int abBtnX = SCREEN_W/2 + 10;
 
     while (!WindowShouldClose()) {
         if (current == MENU) {
@@ -25,9 +27,10 @@ int main(void) {
             if (IsKeyPressed(KEY_FIVE)  || IsKeyPressed(KEY_KP_5)) current = PROGRAM5;
             if (IsKeyPressed(KEY_A)) current = ABOUT;
             Vector2 m = GetMousePosition();
-            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) &&
-                CheckCollisionPointRec(m, (Rectangle){abBtnX, abBtnY, 160, 36}))
-                current = ABOUT;
+            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+                if (CheckCollisionPointRec(m, (Rectangle){umbraBtnX, btnY, 160, 36})) current = PROGRAM5;
+                if (CheckCollisionPointRec(m, (Rectangle){abBtnX, btnY, 160, 36})) current = ABOUT;
+            }
         }
         if (current != MENU && BackButtonPressed()) current = MENU;
 

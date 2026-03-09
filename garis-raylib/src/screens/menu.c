@@ -59,17 +59,25 @@ void DrawMenu(void) {
     DrawText("Normal, dash, tebal, dash-dot  [Bresenham]", c2+18, r2+120, 13, LIGHTGRAY);
     DrawText("[Tekan 4]", c2+cW-100, r2+cH-28, 16, ORANGE);
 
-    int abBtnX = SCREEN_W/2 - 80, abBtnY = r2 + cH + 14;
+    int btnY = r2 + cH + 14; 
+    int umbraBtnX = SCREEN_W/2 - 170; 
+    int abBtnX = SCREEN_W/2 + 10;     
     Vector2 mouse = GetMousePosition();
-    int abHover = CheckCollisionPointRec(mouse, (Rectangle){abBtnX, abBtnY, 160, 36});
-    DrawRectangleRounded((Rectangle){abBtnX, abBtnY, 160, 36}, 0.3f, 6,
+
+    int umbraHover = CheckCollisionPointRec(mouse, (Rectangle){umbraBtnX, btnY, 160, 36});
+    DrawRectangleRounded((Rectangle){umbraBtnX, btnY, 160, 36}, 0.3f, 6,
+                         umbraHover ? (Color){100,50,150,230} : (Color){50,20,80,220});
+    DrawRectangleRoundedLines((Rectangle){umbraBtnX, btnY, 160, 36}, 0.3f, 6, umbraHover ? WHITE : VIOLET);
+    DrawText("[ 5 ] Nick", umbraBtnX + 22, btnY + 10, 16, WHITE);
+
+    int abHover = CheckCollisionPointRec(mouse, (Rectangle){abBtnX, btnY, 160, 36});
+    DrawRectangleRounded((Rectangle){abBtnX, btnY, 160, 36}, 0.3f, 6,
                          abHover ? (Color){60,100,180,230} : (Color){25,35,70,220});
-    DrawRectangleRoundedLines((Rectangle){abBtnX, abBtnY, 160, 36}, 0.3f, 6,
-                              abHover ? WHITE : (Color){80,110,200,255});
-    DrawText("[ A ] About", abBtnX + 22, abBtnY + 10, 16, WHITE);
+    DrawRectangleRoundedLines((Rectangle){abBtnX, btnY, 160, 36}, 0.3f, 6, abHover ? WHITE : (Color){80,110,200,255});
+    DrawText("[ A ] About", abBtnX + 22, btnY + 10, 16, WHITE);
 
     DrawRectangle(0, SCREEN_H-50, SCREEN_W, 50, (Color){15,15,35,255});
     DDALine(0, SCREEN_H-50, SCREEN_W, SCREEN_H-50, (Color){60,80,160,255});
-    DrawText("[1] P1  [2] P2  [3] P3  [4] P4  [A] About  |  [ESC] Keluar",
-             SCREEN_W/2-240, SCREEN_H-33, 16, GRAY);
+    DrawText("[1] P1  [2] P2  [3] P3  [4] P4  [5] Nick  [A] About  |  [ESC] Keluar",
+        SCREEN_W/2-280, SCREEN_H-33, 16, GRAY);
 }

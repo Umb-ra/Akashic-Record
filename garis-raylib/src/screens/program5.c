@@ -16,19 +16,27 @@ void DrawProgram5(void) {
     int x = (SCREEN_W / 2) - (totalLebar / 2);
     int y = (SCREEN_H / 2) - (h / 2);
 
-    // MENGGAMBAR HURUF F 
-    BresenhamLine(x, y, x, y + h, c);             
-    BresenhamLine(x, y, x + w, y, c);            
-    BresenhamLine(x, y + h/2, x + w - 10, y + h/2, c); 
-    
-    x = x + w + gap; //Geser X ke kanan untuk huruf berikutnya
+    // MENGGAMBAR HURUF U
+    BresenhamLine(x, y, x, y + h, c);
+    BresenhamLine(x + w, y, x + w, y + h, c);
+    BresenhamLine(x, y + h, x + w, y + h, c);
 
-    // MENGGAMBAR HURUF A 
-    BresenhamLine(x, y + h, x, y, c);            
-    BresenhamLine(x, y, x + w, y, c);             
-    BresenhamLine(x + w, y, x + w, y + h, c);     
-    BresenhamLine(x, y + h/2, x + w, y + h/2, c); 
+    x = x + w + gap; //Geser X ke kanan untuk huruf berikutnya
     
+    // MENGGAMBAR HURUF M
+    BresenhamLine(x, y, x, y + h, c);
+    BresenhamLine(x + w, y, x + w, y + h, c);
+    BresenhamLine(x, y, x + w/2, y + h/2, c);
+    BresenhamLine(x + w, y, x + w/2, y + h/2, c);
+
+    x = x + w + gap; 
+
+    // MENGGAMBAR HURUF B
+    BresenhamLine(x, y, x, y + h, c);               // Garis vertikal kiri
+    BresenhamLine(x, y, x + w, y, c);               // Garis horizontal atas
+    BresenhamLine(x, y + h/2, x + w, y + h/2, c);   // Garis horizontal tengah
+    BresenhamLine(x, y + h, x + w, y + h, c);       // Garis horizontal bawah
+    BresenhamLine(x + w, y, x + w, y + h, c);       // Garis vertikal kanan
     x = x + w + gap; 
 
     // MENGGAMBAR HURUF R
@@ -37,18 +45,12 @@ void DrawProgram5(void) {
     BresenhamLine(x + w, y, x + w, y + h/2, c);
     BresenhamLine(x, y + h/2, x + w, y + h/2, c);
     BresenhamLine(x, y + h/2, x + w, y + h, c);
-    
     x = x + w + gap; 
 
-    // MENGGAMBAR HURUF I
-    BresenhamLine(x + w/2, y, x + w/2, y + h, c);
-    BresenhamLine(x, y, x + w, y, c);
-    BresenhamLine(x, y + h, x + w, y + h, c);
-    
-    x = x + w + gap; 
-
-    // MENGGAMBAR HURUF Z 
-    BresenhamLine(x, y, x + w, y, c);
-    BresenhamLine(x + w, y, x, y + h, c);
-    BresenhamLine(x, y + h, x + w, y + h, c);
+    // MENGGAMBAR HURUF A
+    BresenhamLine(x, y + h, x, y, c);            
+    BresenhamLine(x, y, x + w, y, c);             
+    BresenhamLine(x + w, y, x + w, y + h, c);     
+    BresenhamLine(x, y + h/2, x + w, y + h/2, c);
+   
 }
