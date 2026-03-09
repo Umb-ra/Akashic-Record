@@ -1,0 +1,55 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Makefile.win — Build untuk Windows menggunakan MinGW / w64devkit
+#
+# CARA PENGGUNAAN:
+#   1. Install w64devkit  → https://github.com/skeeto/w64devkit/releases
+#      ATAU MinGW-w64     → https://www.mingw-w64.org/
+#   2. Download Raylib untuk Windows (mingw) dari https://github.com/raysan5/raylib/releases
+#      Ekstrak, lalu sesuaikan RAYLIB_PATH di bawah.
+#   3. Buka terminal (cmd / PowerShell / Git Bash) di folder proyek ini.
+#   4. Jalankan:
+#        make -f Makefile.win        <- hanya build
+#        make -f Makefile.win run    <- build + jalankan langsung
+#        make -f Makefile.win clean  <- hapus hasil build
+#
+# STRUKTUR FOLDER RAYLIB YANG DIHARAPKAN:
+#   C:\raylib\
+#     include\   <- raylib.h, dll.
+#     lib\       <- libraylib.a
+#
+# Ganti RAYLIB_PATH jika menyimpan Raylib di tempat lain.
+# ─────────────────────────────────────────────────────────────────────────────
+
+RAYLIB_PATH = C:/raylib
+
+CC     = gcc
+CFLAGS = -Wall -O2 -I. -I$(RAYLIB_PATH)/include
+LIBS   = -L$(RAYLIB_PATH)/lib -lraylib -lopengl32 -lgdi32 -lwinmm -lm
+
+TARGET = grafika_dda.exe
+
+SRCS = main.c \
+       coords.c \
+       src/algo/dda.c \
+       src/algo/bresenham.c \
+       src/ui/primitives.c \
+       src/ui/back_button.c \
+       src/ui/cartesian.c \
+       src/screens/program1.c \
+       src/screens/program2.c \
+       src/screens/program3.c \
+       src/screens/program4.c \
+       src/screens/program5.c \
+       src/screens/about.c \
+       src/screens/menu.c
+
+all: $(TARGET)
+
+$(TARGET): $(SRCS)
+	$(CC) $(CFLAGS) -o $(TARGET) $(SRCS) $(LIBS)
+
+clean:
+	rm -f $(TARGET)
+
+run: all
+	./$(TARGET)
