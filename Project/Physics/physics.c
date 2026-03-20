@@ -46,8 +46,12 @@ void UpdatePhysics(Car *car, float dt) {
         float penetrasi = batas_bawah_roda - tinggi_tanah;
 
         if (penetrasi > 0) {
+            float max_compression = 20.0f;
+            if (penetrasi > max_compression) {
+                penetrasi = max_compression;
+            }
             car->wheelCompression[i] = penetrasi;
-            car->position.y = car->position.y - (penetrasi * 0.5f); // Koreksi posisi mobil agar tidak terlalu masuk ke tanah
+            car->position.y = car->position.y - (penetrasi * 0.2f);
             roda_ditanah++;
         }else{
             car->wheelCompression[i] = car->wheelCompression[i] - car->wheelCompression[i] * 15.0f * dt; 

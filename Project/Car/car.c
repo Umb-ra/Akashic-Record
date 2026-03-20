@@ -18,7 +18,7 @@ void InitCar(Car *car, float startX, float startY) {
     car->wheelPositions[0] = (Vector2){-25, 30}; // Roda Belakang
     car->wheelPositions[1] = (Vector2){25, 30};  // Roda Depan
     
-    car->wheelRadius = 15.0f;
+    car->wheelRadius = 10.0f;
     car->wheelRotation = 0.0f;
     car->wheelCompression[0] = 0.0f;
     car->wheelCompression[1] = 0.0f;
