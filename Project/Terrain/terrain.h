@@ -4,7 +4,7 @@
 #include <raylib.h>
 #include <math.h>
 #include "../algo/bresenham.h"
-#define TERRAIN_COUNT 5000
+#define TERRAIN_COUNT 3000
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>

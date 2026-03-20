@@ -6,5 +6,7 @@
 #include <math.h>
 
 void UpdatePhysics(Car *car, float dt);
+void updateSmoke(float dt);
+void drawSmoke(void);
 
 #endif

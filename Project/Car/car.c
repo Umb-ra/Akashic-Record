@@ -15,11 +15,14 @@ void InitCar(Car *car, float startX, float startY) {
     car->vertices[4] = (Vector2){40, -5};   // Kap Mesin
     car->vertices[5] = (Vector2){40, 15};   // Bawah Depan
 
-    car->wheelPositions[0] = (Vector2){-25, 15}; // Roda Belakang
-    car->wheelPositions[1] = (Vector2){25, 15};  // Roda Depan
+    car->wheelPositions[0] = (Vector2){-25, 30}; // Roda Belakang
+    car->wheelPositions[1] = (Vector2){25, 30};  // Roda Depan
     
-    car->wheelRadius = 12.0f;
+    car->wheelRadius = 15.0f;
     car->wheelRotation = 0.0f;
+    car->wheelCompression[0] = 0.0f;
+    car->wheelCompression[1] = 0.0f;
+    car->angularVelocity = 0.0f;
 }
 
 void DrawCar(Car *car) {
@@ -51,8 +54,9 @@ void DrawCar(Car *car) {
 
     //Gambar roda
     for (int w = 0; w < 2; w++) {
-        float pusat_roda_x = (car->wheelPositions[w].x * cos(car->rotation)) - (car->wheelPositions[w].y * sin(car->rotation));
-        float pusat_roda_y = (car->wheelPositions[w].x * sin(car->rotation)) + (car->wheelPositions[w].y * cos(car->rotation));
+        float y_roda_dinamis = car->wheelPositions[w].y - car->wheelCompression[w];
+        float pusat_roda_x = (car->wheelPositions[w].x * cosf(car->rotation)) - (y_roda_dinamis * sinf(car->rotation));
+        float pusat_roda_y = (car->wheelPositions[w].x * sinf(car->rotation)) + (y_roda_dinamis * cosf(car->rotation));
         
         float Screen_X = pusat_roda_x + car->position.x;
         float Screen_Y = pusat_roda_y + car->position.y;
@@ -83,3 +87,4 @@ void DrawCar(Car *car) {
         }
     }
 }
+

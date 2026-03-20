@@ -49,6 +49,7 @@ void drawTerrain(void) {
                        (int)terrain[i + 1].x, (int)terrain[i + 1].y, 
                        3, DARKGREEN);
     }
+    
 }
 
 float getTerrainHeight(float x_pos){
@@ -69,17 +70,30 @@ float getTerrainHeight(float x_pos){
 void drawTrees(){
     for (int i = 0; i < TERRAIN_COUNT; i++) {
         if (trees[i].active) {
-            int tinggi_pohon = 30;
-            BresenhamLine(trees[i].x, trees[i].y, trees[i].x, trees[i].y - tinggi_pohon, BROWN);
+            int tinggi_pohon = 35;
+            Bres_ThickLine(trees[i].x, trees[i].y, trees[i].x, trees[i].y - tinggi_pohon, 4, BROWN);
+            
+            int jumlah_layer_daun = 3;
+            int daun_size_awal = 18;
+            int tinggi_daun = 25;
+            int jarak_overlap = 17;            float dasar_y =  trees[i].y - tinggi_pohon + 5;
 
-            int daun_size = 15;
-            tree Titik_puncak = {trees[i].x, trees[i].y - tinggi_pohon - 20};
-            tree Titik_kiri = {trees[i].x - daun_size, trees[i].y - tinggi_pohon};
-            tree Titik_kanan = {trees[i].x + daun_size, trees[i].y - tinggi_pohon};
+            for (int j = 0; j < jumlah_layer_daun; j++) {
+                int ukuran_daun = daun_size_awal - (j * 4);
+                float layer_y = dasar_y - (j * jarak_overlap);
 
-            BresenhamLine(Titik_kiri.x, Titik_kiri.y, Titik_kanan.x, Titik_kanan.y, GREEN);
-            BresenhamLine(Titik_kiri.x, Titik_kiri.y, Titik_puncak.x, Titik_puncak.y, GREEN);
-            BresenhamLine(Titik_kanan.x, Titik_kanan.y, Titik_puncak.x, Titik_puncak.y, GREEN);      
+                int puncak_x = trees[i].x;
+                int puncak_y = (int)(layer_y - tinggi_daun);
+                int kiri_x = (int)(trees[i].x - ukuran_daun);
+                int kanan_x = (int)(trees[i].x + ukuran_daun);
+                int kiri_y = (int)layer_y;
+                int kanan_y = (int)layer_y;
+
+                BresenhamLine(kiri_x, kiri_y, kanan_x, kanan_y, DARKGREEN);
+                BresenhamLine(kiri_x, kiri_y, puncak_x, puncak_y, DARKGREEN);
+                BresenhamLine(kanan_x, kanan_y, puncak_x, puncak_y, DARKGREEN);
+            }
+            
         }
     }
 }
