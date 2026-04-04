@@ -17,6 +17,8 @@ typedef struct Car {
     float wheelRotation;      
     float wheelCompression[2];
     float angularVelocity;
+    float width;
+    float height;
     
 } Car;
 

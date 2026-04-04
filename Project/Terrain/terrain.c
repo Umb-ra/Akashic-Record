@@ -43,13 +43,35 @@ void generateTerrain(void) {
     }
 }
 
-void drawTerrain(void) {
+void drawTerrain(bool is_debug) {
     for (int i = 0; i < TERRAIN_COUNT - 1; i++) {
-        Bres_ThickLine((int)terrain[i].x, (int)terrain[i].y, 
-                       (int)terrain[i + 1].x, (int)terrain[i + 1].y, 
-                       3, DARKGREEN);
+        if (is_debug == true) {
+            // MODE DEBUG: Kerangka Garis
+            Bres_ThickLine((int)terrain[i].x, (int)terrain[i].y, 
+                           (int)terrain[i + 1].x, (int)terrain[i + 1].y, 
+                           3, DARKGREEN);
+        } else {
+            // MODE GAME: Tanah Mars Solid
+            int x1 = (int)terrain[i].x;
+            int y1 = (int)terrain[i].y;
+            int x2 = (int)terrain[i + 1].x;
+            int y2 = (int)terrain[i + 1].y;
+            int jarak_x = x2 - x1;
+
+            // Fill daging tanah
+            if (jarak_x > 0){
+                for (int x = x1; x <= x2; x++) {
+                    float rasio = (float)(x - x1) / jarak_x;
+                    int y_permukaan = (int)(y1 + rasio * (y2 - y1));
+                    DrawRectangle(x, y_permukaan + 4, 1, 2000, BROWN);
+                }
+            }
+            // Garis rumput atas
+            for (int tebal = 0; tebal < 5; tebal++) {
+                BresenhamLine(x1, y1 + tebal, x2, y2 + tebal, GREEN);
+            }
+        }
     }
-    
 }
 
 float getTerrainHeight(float x_pos){
@@ -67,16 +89,24 @@ float getTerrainHeight(float x_pos){
 
 }
 
-void drawTrees(){
+void drawTrees(bool is_debug){
     for (int i = 0; i < TERRAIN_COUNT; i++) {
         if (trees[i].active) {
             int tinggi_pohon = 35;
-            Bres_ThickLine(trees[i].x, trees[i].y, trees[i].x, trees[i].y - tinggi_pohon, 4, BROWN);
+            float dasar_y = trees[i].y - tinggi_pohon + 5;
+
+            if (is_debug == true) {
+                // Mode Kerangka
+                Bres_ThickLine(trees[i].x, trees[i].y, trees[i].x, trees[i].y - tinggi_pohon, 4, BROWN);
+            } else {
+                // Mode Solid: Lebar batang 4, kita geser X ke kiri sebanyak 2 agar pas di tengah
+                DrawRectangle(trees[i].x - 2, trees[i].y - tinggi_pohon, 4, tinggi_pohon, DARKBROWN);
+            }
             
             int jumlah_layer_daun = 3;
             int daun_size_awal = 18;
             int tinggi_daun = 25;
-            int jarak_overlap = 17;            float dasar_y =  trees[i].y - tinggi_pohon + 5;
+            int jarak_overlap = 17;
 
             for (int j = 0; j < jumlah_layer_daun; j++) {
                 int ukuran_daun = daun_size_awal - (j * 4);
@@ -89,9 +119,19 @@ void drawTrees(){
                 int kiri_y = (int)layer_y;
                 int kanan_y = (int)layer_y;
 
-                BresenhamLine(kiri_x, kiri_y, kanan_x, kanan_y, DARKGREEN);
-                BresenhamLine(kiri_x, kiri_y, puncak_x, puncak_y, DARKGREEN);
-                BresenhamLine(kanan_x, kanan_y, puncak_x, puncak_y, DARKGREEN);
+                if (is_debug == true) {
+                    // Mode Kerangka Bresenham
+                    BresenhamLine(kiri_x, kiri_y, kanan_x, kanan_y, DARKGREEN);
+                    BresenhamLine(kiri_x, kiri_y, puncak_x, puncak_y, DARKGREEN);
+                    BresenhamLine(kanan_x, kanan_y, puncak_x, puncak_y, DARKGREEN);
+                } else {
+                    // Mode Solid: DrawTriangle butuh urutan Berlawanan Arah Jarum Jam (CCW)
+                    Vector2 v1 = { (float)puncak_x, (float)puncak_y }; // Atas
+                    Vector2 v2 = { (float)kiri_x, (float)kiri_y };     // Kiri Bawah
+                    Vector2 v3 = { (float)kanan_x, (float)kanan_y };   // Kanan Bawah
+                    
+                    DrawTriangle(v1, v2, v3, DARKGREEN);
+                }
             }
             
         }

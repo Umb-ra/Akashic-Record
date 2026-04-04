@@ -15,10 +15,13 @@ void InitCar(Car *car, float startX, float startY) {
     car->vertices[4] = (Vector2){40, -5};   // Kap Mesin
     car->vertices[5] = (Vector2){40, 15};   // Bawah Depan
 
-    car->wheelPositions[0] = (Vector2){-25, 30}; // Roda Belakang
-    car->wheelPositions[1] = (Vector2){25, 30};  // Roda Depan
-    
-    car->wheelRadius = 10.0f;
+    car->wheelPositions[0] = (Vector2){-25, 20}; // Roda Belakang
+    car->wheelPositions[1] = (Vector2){25, 20};  // Roda Depan
+
+    car->width = 80.0f;  
+    car->height = 35.0f;  
+
+    car->wheelRadius = 12.0f;
     car->wheelRotation = 0.0f;
     car->wheelCompression[0] = 0.0f;
     car->wheelCompression[1] = 0.0f;

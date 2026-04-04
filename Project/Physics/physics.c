@@ -1,7 +1,7 @@
 #include "physics.h"
 
 #define TENAGA_MOBIL 500.0f
-#define GRAVITY 700.0f 
+#define GRAVITY 600.0f 
 
 particle smokePool[50];
 

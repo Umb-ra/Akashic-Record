@@ -4,6 +4,7 @@
 #include <raylib.h>
 #include "../physics/physics.h"
 #include "../algo/bresenham.h"
+#include "../Car/car.h"
 
-void DrawGameVisuals(Car *car, Vector2 *terrain, int terrain_count, Texture2D bg, Texture2D body, Texture2D wheel);
+void DrawGameVisuals(Car *car, Texture2D body, Texture2D wheel);
 #endif
