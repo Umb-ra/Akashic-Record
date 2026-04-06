@@ -16,7 +16,7 @@ int main() {
     generateTerrain();
     float spawn_x = 300.0f;
     float tinggi_tanah_asli = getTerrainHeight(spawn_x);
-    float spawn_y = tinggi_tanah_asli;
+    float spawn_y = tinggi_tanah_asli - 40.0f;
     Car car;
     InitCar(&car, spawn_x, spawn_y);
     // Setup camera
@@ -42,7 +42,8 @@ int main() {
 
     while (!WindowShouldClose()) {
         float dt = GetFrameTime();
-        
+        if (dt > 0.1f) dt = 0.1f;
+
         // --- AMBIL UKURAN LAYAR TIAP FRAME ---
         float Screen_width = GetScreenWidth();
         float Screen_height = GetScreenHeight();
@@ -52,6 +53,13 @@ int main() {
 
         if (IsKeyPressed(KEY_TAB)) {
             debug_mode = !debug_mode;
+        }
+
+        if (IsKeyPressed(KEY_UP)) {
+            if (car.gear < 3) car.gear++;
+        }
+        if (IsKeyPressed(KEY_DOWN)) {
+            if (car.gear > 1) car.gear--;
         }
 
         UpdatePhysics(&car, dt);
@@ -100,13 +108,13 @@ int main() {
         BeginMode2D(camera);
 
         if (debug_mode == true) {
-            drawTerrain(true);
-            drawTrees(true);
+            drawTerrain(true, camera.target.x, Screen_width);
+            drawTrees(true, camera.target.x, Screen_width);
             DrawCar(&car);
         } else {
             // Urutan sangat penting: Tanah -> Pohon -> Mobil
-            drawTerrain(false); 
-            drawTrees(false);
+            drawTerrain(false, camera.target.x, Screen_width); 
+            drawTrees(false, camera.target.x, Screen_width);
             DrawGameVisuals(&car, tex_body, tex_wheel); 
         }
 
@@ -114,7 +122,10 @@ int main() {
         EndMode2D();
         
         DrawText("Tekan TAB untuk ganti mode grafik", 20, 20, 20, DARKGRAY);
-
+        float speed_kmh = fabs(car.velocity.x) / 10.0f; // Konversi kecepatan
+        DrawText(TextFormat("KECEPATAN: %.0f KM/H", speed_kmh), 20, 50, 25, RED);
+        DrawText(TextFormat("GIGI TRANSMISI: %d (Tekan UP/DOWN untuk ganti)", car.gear), 20, 80, 20, BLUE);
+        DrawText("Hati-hati Lumpur (Bikin Pelan) dan Batu (Bikin Loncat)!", 20, 110, 15, BLACK);
         EndDrawing();
     }
     

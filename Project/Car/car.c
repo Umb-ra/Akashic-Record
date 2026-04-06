@@ -26,6 +26,8 @@ void InitCar(Car *car, float startX, float startY) {
     car->wheelCompression[0] = 0.0f;
     car->wheelCompression[1] = 0.0f;
     car->angularVelocity = 0.0f;
+
+    car->gear = 1;
 }
 
 void DrawCar(Car *car) {

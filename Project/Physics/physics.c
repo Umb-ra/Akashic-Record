@@ -1,6 +1,5 @@
 #include "physics.h"
 
-#define TENAGA_MOBIL 500.0f
 #define GRAVITY 600.0f 
 
 particle smokePool[50];
@@ -68,8 +67,8 @@ void UpdatePhysics(Car *car, float dt) {
                     kedalaman = max_suspension;
                 }
                 //Hooke law: F = -k * x
-                float k = 400.0f;
-                float damping = 10.0f;
+                float k = 150.0f;
+                float damping = 12.0f;
                 float gaya_pegas = -k * kedalaman;
                 float gaya_redaman = -damping * car->velocity.y;
 
@@ -86,7 +85,7 @@ void UpdatePhysics(Car *car, float dt) {
                     penetrasi = max_compression;
                 }
                 car->wheelCompression[i] = penetrasi;
-                car->position.y = car->position.y - (penetrasi * 0.2f);
+                car->position.y = car->position.y - (penetrasi * 0.1f);
                 roda_ditanah++;
             }else{
                 car->wheelCompression[i] = car->wheelCompression[i] - car->wheelCompression[i] * 15.0f * dt; 
@@ -124,15 +123,37 @@ void UpdatePhysics(Car *car, float dt) {
         car->rotation = car->rotation + (car->angularVelocity * dt);
         car->velocity.x = car->velocity.x + sinf(car->rotation) * gravitasi_lereng * dt;
 
+        int current_obstacle = OBS_NONE;
+        for (int i = 0; i < 2; i++) {
+            float p_x = car->position.x + (car->wheelPositions[i].x * cosf(car->rotation) - car->wheelPositions[i].y * sinf(car->rotation));
+            int obs = getObstacleAt(p_x);
+            if (obs != OBS_NONE) current_obstacle = obs;
+        }
+
+        // --- PERBAIKAN 1: FISIKA RINTANGAN LEBIH SMOOTH (Pakai dt) ---
+        if (current_obstacle == OBS_MUD) {
+            // Lumpur: Rem perlahan, menyedot kecepatan dengan halus berdasarkan waktu
+            car->velocity.x = car->velocity.x - (car->velocity.x * 2.5f * dt);        } else if (current_obstacle == OBS_ROCK) {
+        }
+        // --- SISTEM GIGI ---
+        float tenaga_mobil = 0.0f;
+        float top_speed = 0.0f;
+        
+        if (car->gear == 1) { tenaga_mobil = 400.0f; top_speed = 250.0f; } 
+        else if (car->gear == 2) { tenaga_mobil = 700.0f; top_speed = 500.0f; } 
+        else if (car->gear == 3) { tenaga_mobil = 1000.0f; top_speed = 900.0f; } 
+        
         if (IsKeyDown(KEY_RIGHT)) {
-            car->velocity.x = car->velocity.x + (TENAGA_MOBIL * dt);
+            if (car->velocity.x < top_speed) {
+                car->velocity.x = car->velocity.x + (tenaga_mobil * dt);
+            } 
 
             float knalpot_loc_x = -40.0f;
             float knalpot_loc_y = 15.0f;
             float cosR = cosf(car->rotation);
             float sinR = sinf(car->rotation);
 
-            //translasai dan rotasi  knalpot (Trigonometri)
+            // Translasai dan rotasi knalpot
             float knalpot_x = car->position.x + (knalpot_loc_x * cosR - knalpot_loc_y * sinR);
             float knalpot_y = car->position.y + (knalpot_loc_x * sinR + knalpot_loc_y * cosR);
 
@@ -143,12 +164,16 @@ void UpdatePhysics(Car *car, float dt) {
                     smokePool[i].position.y = knalpot_y;
                     smokePool[i].velocity.x = -150.0f;
                     smokePool[i].velocity.y = -50.0f;
-                    smokePool[i].lifetime = 0.5f; // 0,5 detik
+                    smokePool[i].lifetime = 0.5f; 
                     break;
                 }
+            }    
+        } 
+        
+        if (IsKeyDown(KEY_LEFT)) {
+            if (car->velocity.x > -250.0f) {
+                car->velocity.x = car->velocity.x - (tenaga_mobil * dt);
             }
-        } else if (IsKeyDown(KEY_LEFT)) {
-            car->velocity.x = car->velocity.x - (TENAGA_MOBIL * dt);
         }
 
     } else {
@@ -185,8 +210,8 @@ void UpdatePhysics(Car *car, float dt) {
         car->velocity.x = 0.0f;
     }
 
-
 }
+
 
 void updateSmoke(float dt){
     for (int i = 0; i < 50; i++){
